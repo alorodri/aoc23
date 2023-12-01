@@ -2,7 +2,6 @@ package day1;
 
 import utils.Problem;
 import utils.ProblemType;
-import utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,19 +27,20 @@ public class Day1 extends Problem {
     @Override
     protected String solveProblem(ArrayList<String> lines, ProblemType type) {
         int result = 0;
-        for (var line : lines) {
+        for (String line : lines) {
             int firstDigit = 0;
             int lastDigit = 0;
             boolean hasFirstDigit = false;
             boolean hasLastDigit = false;
             for (int i = 0; i < line.length(); i++) {
-                if (line.charAt(i) > 47 && line.charAt(i) < 58) {
+                char c = line.charAt(i);
+                if (c > 47 && c < 58) {
                     if (!hasFirstDigit) {
-                        firstDigit = line.charAt(i) - 48;
+                        firstDigit = c - 48;
                         hasFirstDigit = true;
                     }
                     else{
-                        lastDigit = line.charAt(i) - 48;
+                        lastDigit = c - 48;
                         hasLastDigit = true;
                     }
                 } else {
@@ -62,7 +62,7 @@ public class Day1 extends Problem {
             if (!hasLastDigit) lastDigit = firstDigit;
             result += firstDigit * 10 + lastDigit;
         }
-        return Utils.cast(result, String.class);
+        return Integer.toString(result);
     }
 
     private String getCharsAsString(int from, int to, String line) {
