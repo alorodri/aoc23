@@ -12,7 +12,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-@State(Scope.Benchmark)
 public class Day1 extends Problem {
     public Day1() {
         super(1, true);
@@ -71,22 +70,6 @@ public class Day1 extends Problem {
             result += firstDigit * 10 + lastDigit;
         }
         return Integer.toString(result);
-    }
-
-    @Benchmark
-    public void benchmarkSolveA() {
-        final String filename = "day1/input.txt";
-        String currentLine;
-        final ArrayList<String> lines = new ArrayList<>();
-        var inputStream = getClass().getClassLoader().getResourceAsStream(filename);
-        try(BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
-            while ((currentLine = br.readLine()) != null) {
-                lines.add(currentLine);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        solveProblem(lines, ProblemType.A);
     }
 
     private String getCharsAsString(int from, int to, String line) {
