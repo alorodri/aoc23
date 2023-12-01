@@ -1,5 +1,6 @@
 package day1;
 
+import com.sun.jdi.StringReference;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
@@ -33,40 +34,34 @@ public class Day1 extends Problem {
     @Override
     protected String solveProblem(final ArrayList<String> lines, ProblemType type) {
         int result = 0;
-        for (String line : lines) {
-            int firstDigit = 0;
-            int lastDigit = 0;
-            boolean hasFirstDigit = false;
-            boolean hasLastDigit = false;
-            for (int i = 0; i < line.length(); i++) {
-                char c = line.charAt(i);
-                if (c > 47 && c < 58) {
-                    int digit = c - 48;
-                    if (!hasFirstDigit) {
+        for (final String line : lines) {
+            int firstDigit = -1;
+            int lastDigit = -1;
+            char[] chars = line.toCharArray();
+            int charidx = 0;
+            for (final char c : chars) {
+                if (c >= '0' && c <= '9') {
+                    int digit = c - '0';
+                    if (firstDigit == -1) {
                         firstDigit = digit;
-                        hasFirstDigit = true;
                     }
-                    else{
-                        lastDigit = digit;
-                        hasLastDigit = true;
-                    }
+                    lastDigit = digit;
                 } else {
                     if (type == ProblemType.B) {
-                        int stringNumber = numbersToStrings.indexOf(getCharsAsString(i, 3, line).toLowerCase());
-                        if (stringNumber == -1) stringNumber = numbersToStrings.indexOf(getCharsAsString(i, 4, line).toLowerCase());
-                        if (stringNumber == -1) stringNumber = numbersToStrings.indexOf(getCharsAsString(i, 5, line).toLowerCase());
+                        int stringNumber = numbersToStrings.indexOf(getCharsAsString(charidx, 3, line).toLowerCase());
+                        if (stringNumber == -1)
+                            stringNumber = numbersToStrings.indexOf(getCharsAsString(charidx, 4, line).toLowerCase());
+                        if (stringNumber == -1)
+                            stringNumber = numbersToStrings.indexOf(getCharsAsString(charidx, 5, line).toLowerCase());
 
-                        if (!hasFirstDigit && stringNumber != -1) {
+                        if (firstDigit == -1 && stringNumber != -1)
                             firstDigit = stringNumber;
-                            hasFirstDigit = true;
-                        } else if (stringNumber != -1) {
-                            lastDigit = stringNumber;
-                            hasLastDigit = true;
-                        }
+
+                        if (stringNumber != -1) lastDigit = stringNumber;
                     }
                 }
+                ++charidx;
             }
-            if (!hasLastDigit) lastDigit = firstDigit;
             result += firstDigit * 10 + lastDigit;
         }
         return Integer.toString(result);
