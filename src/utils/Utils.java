@@ -16,15 +16,11 @@ public class Utils {
         return type.cast(value);
     }
 
-    public static String measureTime(Callable<String> method) {
+    public static String measureTime(UnsafeCallable<String> method) {
         long start = System.nanoTime();
         final String result;
 
-        try {
-            result = method.call();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        result = method.call();
 
         final long end = System.nanoTime();
         final long durationNanos = end - start;
