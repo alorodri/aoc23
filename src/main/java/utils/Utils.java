@@ -1,7 +1,5 @@
 package utils;
 
-import java.util.concurrent.Callable;
-
 public class Utils {
     public static <T> T cast(Object value, Class<T> type) {
         if (value instanceof Integer) {

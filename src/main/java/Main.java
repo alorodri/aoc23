@@ -1,4 +1,5 @@
 import day1.Day1;
+import org.openjdk.jmh.annotations.Benchmark;
 
 public class Main {
     public static void main(String[] args) {

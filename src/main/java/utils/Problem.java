@@ -42,7 +42,7 @@ public abstract class Problem {
 
     public void test() {
         this.testing = true;
-        var lines = this.readLines();
+        ArrayList<String> lines = this.readLines();
         System.out.println("[TEST A] Result: " + solveProblem(lines, ProblemType.A));
         if (hasTestB) lines = this.readLines(true);
         System.out.println("[TEST B] Result: " + solveProblem(lines, ProblemType.B));

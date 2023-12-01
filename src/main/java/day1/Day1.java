@@ -1,11 +1,18 @@
 package day1;
 
+import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.Scope;
+import org.openjdk.jmh.annotations.State;
 import utils.Problem;
 import utils.ProblemType;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+@State(Scope.Benchmark)
 public class Day1 extends Problem {
     public Day1() {
         super(1, true);
@@ -25,7 +32,7 @@ public class Day1 extends Problem {
     );
 
     @Override
-    protected String solveProblem(ArrayList<String> lines, ProblemType type) {
+    protected String solveProblem(final ArrayList<String> lines, ProblemType type) {
         int result = 0;
         for (String line : lines) {
             int firstDigit = 0;
@@ -35,12 +42,13 @@ public class Day1 extends Problem {
             for (int i = 0; i < line.length(); i++) {
                 char c = line.charAt(i);
                 if (c > 47 && c < 58) {
+                    int digit = c - 48;
                     if (!hasFirstDigit) {
-                        firstDigit = c - 48;
+                        firstDigit = digit;
                         hasFirstDigit = true;
                     }
                     else{
-                        lastDigit = c - 48;
+                        lastDigit = digit;
                         hasLastDigit = true;
                     }
                 } else {
@@ -65,10 +73,26 @@ public class Day1 extends Problem {
         return Integer.toString(result);
     }
 
+    @Benchmark
+    public void benchmarkSolveA() {
+        final String filename = "day1/input.txt";
+        String currentLine;
+        final ArrayList<String> lines = new ArrayList<>();
+        var inputStream = getClass().getClassLoader().getResourceAsStream(filename);
+        try(BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
+            while ((currentLine = br.readLine()) != null) {
+                lines.add(currentLine);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        solveProblem(lines, ProblemType.A);
+    }
+
     private String getCharsAsString(int from, int to, String line) {
         if (to > line.length() - from) {
             return "";
         }
-        return new String(line.toCharArray(), from, to);
+        return line.substring(from, from + to);
     }
 }
