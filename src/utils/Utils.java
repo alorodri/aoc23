@@ -4,14 +4,10 @@ import java.util.concurrent.Callable;
 
 public class Utils {
     public static <T> T cast(Object value, Class<T> type) {
-        try {
-            if (value instanceof Integer) {
-                if (String.class.equals(type)) return type.cast(value.toString());
-            } else if (value instanceof String) {
-                if (Integer.class.equals(type)) return type.cast(Integer.parseInt((String) value));
-            }
-        } catch (Exception e) {
-            throw new IllegalArgumentException("No se puede convertir el valor " + value + " al tipo " + type.getSimpleName(), e);
+        if (value instanceof Integer) {
+            if (String.class.equals(type)) return type.cast(value.toString());
+        } else if (value instanceof String) {
+            if (Integer.class.equals(type)) return type.cast(Integer.parseInt((String) value));
         }
         return type.cast(value);
     }

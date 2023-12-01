@@ -2,6 +2,7 @@ package day1;
 
 import utils.Problem;
 import utils.ProblemType;
+import utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +62,7 @@ public class Day1 extends Problem {
             if (!hasLastDigit) lastDigit = firstDigit;
             result += firstDigit * 10 + lastDigit;
         }
-        return Integer.toString(result);
+        return Utils.cast(result, String.class);
     }
 
     private String getCharsAsString(int from, int to, String line) {
