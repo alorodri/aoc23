@@ -1,15 +1,8 @@
 package day1;
 
-import com.sun.jdi.StringReference;
-import org.openjdk.jmh.annotations.Benchmark;
-import org.openjdk.jmh.annotations.Scope;
-import org.openjdk.jmh.annotations.State;
 import utils.Problem;
 import utils.ProblemType;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
