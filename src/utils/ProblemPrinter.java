@@ -2,9 +2,9 @@ package utils;
 
 public class ProblemPrinter {
 
-    final static String leftAlignFormat = "| %-30s | %-10s |%n";
+    final static String leftAlignFormat = "| %-45s | %-15s |%n";
     public static void startPrinting() {
-        System.out.format("+--------------------------------+------------+%n");
+        System.out.format("+-----------------------------------------------+-----------------+%n");
         System.out.format(leftAlignFormat, "ADVENT OF CODE 2023", "RESULT");
     }
 
@@ -17,6 +17,6 @@ public class ProblemPrinter {
     }
 
     public static void endPrinting() {
-        System.out.format("+--------------------------------+------------+%n");
+        System.out.format("+-----------------------------------------------+-----------------+%n");
     }
 }

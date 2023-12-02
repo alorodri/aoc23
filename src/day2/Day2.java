@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@TestResults(resultA = "8", resultB = "undefined")
+@TestResults(resultA = "8", resultB = "2286")
 public class Day2 extends Problem {
 
     private final static int MAX_RED = 12;
@@ -19,20 +19,25 @@ public class Day2 extends Problem {
 
     @Override
     protected String solveProblem(ArrayList<String> lines, ProblemType type) {
+        List<Integer> validGroups = new ArrayList<>();
+        AtomicInteger maxRedInBag = new AtomicInteger();
+        AtomicInteger maxBlueInBag = new AtomicInteger();
+        AtomicInteger maxGreenInBag = new AtomicInteger();
         for (String line : lines) {
 
+            // parsing
             final Info ref = new Info();
-            Parser.sep(":", line).forEach(s -> {
+            Parser.split(":", line).forEach(s -> {
                 if (s.startsWith("Game")) {
-                    ref.game = Utils.cast(Parser.sep(" ", s).skip(1).findFirst().get(), Integer.class);
+                    ref.game = Utils.convert(Parser.split(" ", s).skip(1).findFirst().get(), Integer.class);
                 } else {
                     // parseando la parte derecha, a partir de los :
-                    Parser.sep(";", s).forEach(group -> {
+                    Parser.split(";", s).forEach(group -> {
                         Info.Group g = new Info.Group();
 
-                        Parser.sep(",", group).forEach(color -> {
+                        Parser.split(",", group).forEach(color -> {
                             String[] numAndColor = color.trim().split(" ");
-                            int num = Utils.cast(numAndColor[0], Integer.class);
+                            int num = Utils.convert(numAndColor[0], Integer.class);
                             String colorName = numAndColor[1];
                             switch (colorName) {
                                 case "red" -> g.reds = num;
@@ -41,20 +46,35 @@ public class Day2 extends Problem {
                             }
                         });
 
-                        ref.groups.add(g);
+                        if (type == ProblemType.A && (g.reds > MAX_RED || g.greens > MAX_GREEN || g.blues > MAX_BLUE)) ref.valid = false;
+                        else if (type == ProblemType.B) {
+                            if (g.reds > maxRedInBag.get()) maxRedInBag.set(g.reds);
+                            if (g.blues > maxBlueInBag.get()) maxBlueInBag.set(g.blues);
+                            if (g.greens > maxGreenInBag.get()) maxGreenInBag.set(g.greens);
+                        }
                     });
+
+                    if (type == ProblemType.A && ref.valid) validGroups.add(ref.game);
+                    else if (type == ProblemType.B) {
+                        validGroups.add(maxRedInBag.get() * maxBlueInBag.get() * maxGreenInBag.get());
+                        maxRedInBag.set(0);
+                        maxBlueInBag.set(0);
+                        maxGreenInBag.set(0);
+                    }
                 }
             });
+            // ended parsing
 
-            Logger.getInstance().log("Parsed " + ref);
         }
-        return null;
+
+        return Utils.convert(validGroups.stream().reduce(Integer::sum).get(), String.class);
     }
 
 
     class Info {
         int game;
         List<Group> groups = new ArrayList<>();
+        boolean valid = true;
 
         @Override
         public String toString() {

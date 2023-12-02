@@ -6,7 +6,7 @@ public class Utils {
     private static final int[] daysWithTestB = new int[] {
             1
     };
-    public static <T> T cast(Object value, Class<T> type) {
+    public static <T> T convert(Object value, Class<T> type) {
         if (value instanceof Integer) {
             if (String.class.equals(type)) return type.cast(value.toString());
         } else if (value instanceof String) {

@@ -10,11 +10,11 @@ public class Parser {
         this.text = text;
     }
 
-    public Stream<String> sep(String delimiter) {
+    public Stream<String> split(String delimiter) {
         return Arrays.stream(text.split(delimiter));
     }
 
-    public static Stream<String> sep(String delimiter, String text) {
+    public static Stream<String> split(String delimiter, String text) {
         return Arrays.stream(text.split(delimiter));
     }
 
