@@ -1,7 +1,8 @@
+import utils.Logger;
 import utils.Utils;
 
 public class Main {
     public static void main(String[] args) {
-        Utils.executeAllDays(1);
+        Utils.executeAllDays(2);
     }
 }

@@ -57,6 +57,10 @@ public abstract class Problem {
     }
 
     private static void assertEquals(final String result, final String expected, char part) {
+        if (result == null) {
+            ProblemPrinter.addRow("Test result is undefined", "");
+            return;
+        }
         if (result.equals(expected)) ProblemPrinter.addRow("TEST "+part+": Correct!", result);
         else ProblemPrinter.addRow("TEST "+part+": Failed! [ Result | Expected]", result + " | " + expected);
     }
