@@ -64,9 +64,9 @@ public abstract class Problem {
     public void solve() {
         final var lines = this.readLines();
         String resultA = Utils.measureTime(() -> solveProblem(lines, ProblemType.A), ProblemType.A);
-        ProblemPrinter.addRow("PROBLEM A", resultA);
+        ProblemPrinter.addRow("Result of problem A", resultA);
         String resultB = Utils.measureTime(() -> solveProblem(lines, ProblemType.B), ProblemType.B);
-        ProblemPrinter.addRow("PROBLEM B", resultB);
+        ProblemPrinter.addRow("Result of problem B", resultB);
 
     }
 }
