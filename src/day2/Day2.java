@@ -24,8 +24,6 @@ public class Day2 extends Problem {
         AtomicInteger maxBlueInBag = new AtomicInteger();
         AtomicInteger maxGreenInBag = new AtomicInteger();
         for (String line : lines) {
-
-            // parsing
             final Info ref = new Info();
             Parser.split(":", line).forEach(s -> {
                 if (s.startsWith("Game")) {
@@ -63,7 +61,6 @@ public class Day2 extends Problem {
                     }
                 }
             });
-            // ended parsing
 
         }
 
