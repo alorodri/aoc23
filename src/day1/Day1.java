@@ -2,10 +2,12 @@ package day1;
 
 import utils.Problem;
 import utils.ProblemType;
+import utils.TestResults;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@TestResults(resultA = "142", resultB = "281")
 public class Day1 extends Problem {
     public Day1() {
         super(1, true);

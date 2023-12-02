@@ -1,4 +1,3 @@
-import day1.Day1;
 import utils.Utils;
 
 public class Main {

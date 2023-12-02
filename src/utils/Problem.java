@@ -42,11 +42,22 @@ public abstract class Problem {
 
     public void test() {
         this.testing = true;
-        ArrayList<String> lines = this.readLines();
-        System.out.println("[TEST A] Result: " + solveProblem(lines, ProblemType.A));
-        if (hasTestB) lines = this.readLines(true);
-        System.out.println("[TEST B] Result: " + solveProblem(lines, ProblemType.B));
+        if (this.getClass().isAnnotationPresent(TestResults.class)) {
+            TestResults testResults = this.getClass().getAnnotation(TestResults.class);
+            ArrayList<String> lines = this.readLines();
+            String resultFromA = solveProblem(lines, ProblemType.A);
+            Problem.assertEquals(resultFromA, testResults.resultA(), 'A');
+
+            if (hasTestB) lines = this.readLines(true);
+            String resultFromB = solveProblem(lines, ProblemType.B);
+            Problem.assertEquals(resultFromB, testResults.resultB(), 'B');
+        }
         this.testing = false;
+    }
+
+    private static void assertEquals(final String result, final String expected, char part) {
+        if (result.equals(expected)) System.out.println("[TEST "+part+"] Correct! Result was " + result);
+        else System.out.println("[TEST "+part+"] Failed! Expected " + expected + ", got " + result);
     }
 
     public void solve() {

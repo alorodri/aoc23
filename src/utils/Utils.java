@@ -3,7 +3,7 @@ package utils;
 import java.util.Arrays;
 
 public class Utils {
-    private static int[] daysWithTestB = new int[] {
+    private static final int[] daysWithTestB = new int[] {
             1
     };
     public static <T> T cast(Object value, Class<T> type) {
