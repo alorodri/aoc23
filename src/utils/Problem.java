@@ -52,20 +52,21 @@ public abstract class Problem {
             String resultFromB = solveProblem(lines, ProblemType.B);
             Problem.assertEquals(resultFromB, testResults.resultB(), 'B');
         }
+        ProblemPrinter.addSeparation();
         this.testing = false;
     }
 
     private static void assertEquals(final String result, final String expected, char part) {
-        if (result.equals(expected)) System.out.println("[TEST "+part+"] Correct! Result was " + result);
-        else System.out.println("[TEST "+part+"] Failed! Expected " + expected + ", got " + result);
+        if (result.equals(expected)) ProblemPrinter.addRow("TEST "+part+": Correct!", result);
+        else ProblemPrinter.addRow("TEST "+part+": Failed! [ Result | Expected]", result + " | " + expected);
     }
 
     public void solve() {
         final var lines = this.readLines();
-        String resultA = Utils.measureTime(() -> solveProblem(lines, ProblemType.A));
-        System.out.println("[PROBLEM A] Result: " + resultA);
-        String resultB = Utils.measureTime(() -> solveProblem(lines, ProblemType.B));
-        System.out.println("[PROBLEM B] Result: " + resultB);
+        String resultA = Utils.measureTime(() -> solveProblem(lines, ProblemType.A), ProblemType.A);
+        ProblemPrinter.addRow("PROBLEM A", resultA);
+        String resultB = Utils.measureTime(() -> solveProblem(lines, ProblemType.B), ProblemType.B);
+        ProblemPrinter.addRow("PROBLEM B", resultB);
 
     }
 }

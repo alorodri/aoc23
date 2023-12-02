@@ -15,7 +15,7 @@ public class Utils {
         return type.cast(value);
     }
 
-    public static String measureTime(UnsafeCallable<String> method) {
+    public static String measureTime(UnsafeCallable<String> method, ProblemType type) {
         long start = System.nanoTime();
         final String result;
 
@@ -24,9 +24,20 @@ public class Utils {
         final long end = System.nanoTime();
         final long durationNanos = end - start;
         final long durationMicro = durationNanos / 1_000;
-        final long durationMilli = durationNanos / 1_000_000;
+        final double durationMilli = durationNanos / 1_000_000.0;
         final double durationSeconds = durationMilli / 1_000.0;
-        System.out.printf("Execution time: %dns, %dµs, %dms, %.2fs%n", durationNanos, durationMicro, durationMilli, durationSeconds);
+        String valueToPrint = "undefined";
+        if (durationSeconds >= 1.0d) {
+            valueToPrint = String.format("%.2fs%n", durationSeconds);
+        } else if (durationMilli >= 1.0d) {
+            valueToPrint = String.format("%.2fms", durationMilli);
+        } else if (durationMicro > 0) {
+            valueToPrint = String.format("%dµs", durationMicro);
+        } else if (durationNanos > 0) {
+            valueToPrint = String.format("%dns", durationNanos);
+        }
+        char typeToChar = type == ProblemType.A ? 'A' : 'B';
+        ProblemPrinter.addRow("Problem "+typeToChar+" executed in", valueToPrint);
         return result;
     }
 
@@ -42,13 +53,20 @@ public class Utils {
     }
 
     public static void executeAllDays(final int total) {
+        ProblemPrinter.startPrinting();
+        ProblemPrinter.addSeparation();
+        ProblemPrinter.addSeparation();
         for (int i = 1; i <= total; i++) {
             int finalI = i;
             boolean hasTestB = false;
             if (Arrays.stream(daysWithTestB).anyMatch(day -> day == finalI)) {
                 hasTestB = true;
             }
+            ProblemPrinter.addRow("Solving DAY " + i, "");
+            ProblemPrinter.addSeparation();
             executeDay(i, hasTestB);
+            ProblemPrinter.addSeparation();
+            ProblemPrinter.addSeparation();
         }
     }
 }
