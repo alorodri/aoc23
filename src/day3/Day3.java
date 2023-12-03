@@ -4,10 +4,8 @@ import utils.Problem;
 import utils.ProblemType;
 import utils.TestResults;
 
-import java.sql.Array;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 @TestResults(resultA = "4361", resultB = "467835")
 public class Day3 extends Problem {
