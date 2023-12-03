@@ -4,11 +4,12 @@ import utils.Problem;
 import utils.ProblemType;
 import utils.TestResults;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.sql.Array;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
-@TestResults(resultA = "4361", resultB = "undefined")
+@TestResults(resultA = "4361", resultB = "467835")
 public class Day3 extends Problem {
     public Day3() {
         super(3);
@@ -18,14 +19,17 @@ public class Day3 extends Problem {
     int rows;
     int wholeTextLength;
     String wholeText;
+    ProblemType type;
 
     @Override
     protected String solveProblem(ArrayList<String> lines, ProblemType type) {
+        this.type = type;
         wholeText = String.join("", lines);
         wholeTextLength = wholeText.length();
         cols = lines.get(0).length();
         rows = wholeTextLength / cols;
         List<ProblemNumber> numbersWithAdjacentSymbol = new ArrayList<>();
+        Map<Integer, List<ProblemNumber>> gearRatios = new HashMap<>();
         boolean checkingIncompleteNumber = false;
         int checkingNumberFirstPosition = 0;
         for (int i = 0; i < wholeTextLength; i++) {
@@ -36,17 +40,42 @@ public class Day3 extends Problem {
             } else if (!Character.isDigit(c)) {
                 checkingIncompleteNumber = false;
             }
-            if (Character.isDigit(c) && hasAdjacentSymbol(i)) {
+            AtomicInteger symbolPosRef = new AtomicInteger();
+            if (Character.isDigit(c) && hasAdjacentSymbol(i, symbolPosRef)) {
                 ProblemNumber wholeNumber = getWholeNumber(checkingNumberFirstPosition);
-                if (!numbersWithAdjacentSymbol.contains(wholeNumber))
-                    numbersWithAdjacentSymbol.add(wholeNumber);
+                if (type == ProblemType.A) {
+                    if (!numbersWithAdjacentSymbol.contains(wholeNumber))
+                        numbersWithAdjacentSymbol.add(wholeNumber);
+                } else {
+                    if (!gearRatios.containsKey(symbolPosRef.get())) {
+                        var ratios = new ArrayList<ProblemNumber>();
+                        ratios.add(wholeNumber);
+                        gearRatios.put(symbolPosRef.get(), ratios);
+                    } else {
+                        if (!gearRatios.get(symbolPosRef.get()).contains(wholeNumber))
+                            gearRatios.get(symbolPosRef.get()).add(wholeNumber);
+                    }
+                }
             }
         }
 
-        return numbersWithAdjacentSymbol.stream().map(pn -> pn.number).reduce(Integer::sum).get().toString();
+        if (type == ProblemType.A) {
+            return numbersWithAdjacentSymbol.stream().map(pn -> pn.number).reduce(Integer::sum).get().toString();
+        } else {
+            return gearRatios.values()
+                    .stream()
+                    .filter(list -> list.size() == 2)
+                    .map(list -> list.stream().map(pn -> pn.number).reduce((a, b) -> a * b).get())
+                    .reduce(0, Integer::sum)
+                    .toString();
+        }
     }
 
     private boolean hasAdjacentSymbol(int numberPosition) {
+        return hasAdjacentSymbol(numberPosition, new AtomicInteger());
+    }
+
+    private boolean hasAdjacentSymbol(int numberPosition, AtomicInteger symbolPosRef) {
         Point2D point = toPoint2D(numberPosition);
         boolean hasAdjacentSymbol = false;
         for (int y = point.y - 1; y <= point.y + 1; y++) {
@@ -57,9 +86,17 @@ public class Day3 extends Problem {
                         || arrayPosition > wholeTextLength - 1)
                     continue;
                 char checkingChar = wholeText.charAt(arrayPosition);
-                if (!Character.isDigit(checkingChar) && checkingChar != '.') {
-                    hasAdjacentSymbol = true;
-                    break;
+                if (type == ProblemType.A) {
+                    if (!Character.isDigit(checkingChar) && checkingChar != '.') {
+                        hasAdjacentSymbol = true;
+                        break;
+                    }
+                } else {
+                    if (checkingChar == '*') {
+                        symbolPosRef.set(arrayPosition);
+                        hasAdjacentSymbol = true;
+                        break;
+                    }
                 }
             }
         }
@@ -110,6 +147,7 @@ public class Day3 extends Problem {
         int number;
         int arrayPosition;
         int digits;
+
         public ProblemNumber(int number, int arrayPosition, int digits) {
             this.number = number;
             this.arrayPosition = arrayPosition;
@@ -129,7 +167,9 @@ public class Day3 extends Problem {
             return Objects.hash(number, arrayPosition, digits);
         }
 
-        public boolean isSame(ProblemNumber n) { return this.arrayPosition == n.arrayPosition; }
+        public boolean isSame(ProblemNumber n) {
+            return this.arrayPosition == n.arrayPosition;
+        }
     }
 
     class Point2D {
