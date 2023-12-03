@@ -14,15 +14,19 @@ public class Utils {
         }
         return type.cast(value);
     }
-
-    public static String measureTime(UnsafeCallable<String> method, ProblemType type) {
+    
+    public static void measureGlobalTime(Runnable method) {
         long start = System.nanoTime();
-        final String result;
-
-        result = method.call();
-
+        
+        method.run();
+        
         final long end = System.nanoTime();
         final long durationNanos = end - start;
+        String valueToPrint = getTimeString(durationNanos);
+        ProblemPrinter.addRow("All problems executed in", valueToPrint);
+    }
+
+    private static String getTimeString(long durationNanos) {
         final long durationMicro = durationNanos / 1_000;
         final double durationMilli = durationNanos / 1_000_000.0;
         final double durationSeconds = durationMilli / 1_000.0;
@@ -36,6 +40,18 @@ public class Utils {
         } else if (durationNanos > 0) {
             valueToPrint = String.format("%dns", durationNanos);
         }
+        return valueToPrint;
+    }
+
+    public static String measureTime(UnsafeCallable<String> method, ProblemType type) {
+        long start = System.nanoTime();
+        final String result;
+
+        result = method.call();
+
+        final long end = System.nanoTime();
+        final long durationNanos = end - start;
+        String valueToPrint = getTimeString(durationNanos);
         char typeToChar = type == ProblemType.A ? 'A' : 'B';
         ProblemPrinter.addRow("Problem "+typeToChar+" executed in", valueToPrint);
         return result;
