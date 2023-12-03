@@ -71,10 +71,6 @@ public class Day3 extends Problem {
         }
     }
 
-    private boolean hasAdjacentSymbol(int numberPosition) {
-        return hasAdjacentSymbol(numberPosition, new AtomicInteger());
-    }
-
     private boolean hasAdjacentSymbol(int numberPosition, AtomicInteger symbolPosRef) {
         Point2D point = toPoint2D(numberPosition);
         boolean hasAdjacentSymbol = false;
@@ -121,22 +117,6 @@ public class Day3 extends Problem {
 
     private int toArrayPosition(Point2D point) {
         return point.y * cols + point.x;
-    }
-
-    private boolean isFirstRow(int arrayPos) {
-        return toPoint2D(arrayPos).y == 0;
-    }
-
-    private boolean isLastRow(int arrayPos) {
-        return toPoint2D(arrayPos).y == rows - 1;
-    }
-
-    private boolean isFirstColumn(int arrayPos) {
-        return toPoint2D(arrayPos).x == 0;
-    }
-
-    private boolean isLastColumn(int arrayPos) {
-        return toPoint2D(arrayPos).y == cols - 1;
     }
 
     private boolean isDifferentRow(int currentArrayPos, int newArrayPos) {
