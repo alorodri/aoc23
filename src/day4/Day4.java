@@ -7,7 +7,9 @@ import utils.TestResults;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @TestResults(resultA = "13", resultB = "30")
 public class Day4 extends Problem {
@@ -62,8 +64,8 @@ public class Day4 extends Problem {
 
     class Card {
         int index;
-        ArrayList<Integer> winningNumbers = new ArrayList<>();
-        ArrayList<Integer> ownedNumbers = new ArrayList<>();
+        Set<Integer> winningNumbers = new HashSet<>();
+        List<Integer> ownedNumbers = new ArrayList<>();
         Card(int index) {
             this.index = index;
         }
