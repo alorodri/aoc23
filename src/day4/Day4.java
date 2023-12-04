@@ -7,7 +7,6 @@ import utils.TestResults;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @TestResults(resultA = "13", resultB = "30")
 public class Day4 extends Problem {
@@ -17,7 +16,7 @@ public class Day4 extends Problem {
 
     @Override
     protected String solveProblem(ArrayList<String> lines, ProblemType type) {
-        AtomicInteger result = new AtomicInteger();
+        int[] result = new int[] {0};
         for (int i = 0; i < lines.size(); i++) {
             var line = lines.get(i);
             int cardNumber = Integer.parseInt((String)
@@ -31,26 +30,26 @@ public class Day4 extends Problem {
                 final String nSplit = groupsSplit[1].trim();
                 List<Integer> winningNumbers = Parser.split(" ", wnSplit).filter(s -> !s.isEmpty()).map(Integer::parseInt).toList();
                 List<Integer> numbersOwned = Parser.split(" ", nSplit).filter(s -> !s.isEmpty()).map(Integer::parseInt).toList();
-                AtomicInteger pointsToSum = new AtomicInteger(0);
+                int[] pointsToSum = new int[] {0};
                 numbersOwned.forEach(n -> {
                     if (winningNumbers.contains(n)) {
                         if (type == ProblemType.A) {
-                            if (pointsToSum.get() == 0) pointsToSum.addAndGet(1);
-                            else pointsToSum.set(pointsToSum.get() * 2);
+                            if (pointsToSum[0] == 0) pointsToSum[0] += 1;
+                            else pointsToSum[0] *= 2;
                         } else {
-                            pointsToSum.addAndGet(1);
+                            pointsToSum[0] += 1;
                         }
                     }
                 });
-                if (type == ProblemType.A) result.addAndGet(pointsToSum.get());
+                if (type == ProblemType.A) result[0] += pointsToSum[0];
                 else {
-                    for (int j = 1; j <= pointsToSum.get(); j++) {
+                    for (int j = 1; j <= pointsToSum[0]; j++) {
                         lines.add(lines.get(cardNumber + j - 1));
                     }
                 }
             });
         }
-        if (type == ProblemType.A) return String.valueOf(result.get());
+        if (type == ProblemType.A) return String.valueOf(result[0]);
         else return String.valueOf(lines.size());
     }
 }
