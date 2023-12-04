@@ -5,6 +5,7 @@ import utils.Problem;
 import utils.ProblemType;
 import utils.TestResults;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class Day4 extends Problem {
     @Override
     protected String solveProblem(ArrayList<String> lines, ProblemType type) {
         int[] result = new int[] {0};
+        List<Card> cards = new ArrayList<>();
         for (int i = 0; i < lines.size(); i++) {
             var line = lines.get(i);
             int cardNumber = Integer.parseInt((String)
@@ -25,31 +27,45 @@ public class Day4 extends Problem {
                             .toArray()[1]
             );
             Parser.split(":", line).skip(1).forEach(groups -> {
+                Card card = new Card(cardNumber);
                 final String[] groupsSplit = groups.trim().split("\\|");
                 final String wnSplit = groupsSplit[0].trim();
                 final String nSplit = groupsSplit[1].trim();
-                List<Integer> winningNumbers = Parser.split(" ", wnSplit).filter(s -> !s.isEmpty()).map(Integer::parseInt).toList();
-                List<Integer> numbersOwned = Parser.split(" ", nSplit).filter(s -> !s.isEmpty()).map(Integer::parseInt).toList();
-                int[] pointsToSum = new int[] {0};
-                numbersOwned.forEach(n -> {
-                    if (winningNumbers.contains(n)) {
-                        if (type == ProblemType.A) {
-                            if (pointsToSum[0] == 0) pointsToSum[0] += 1;
-                            else pointsToSum[0] *= 2;
-                        } else {
-                            pointsToSum[0] += 1;
-                        }
-                    }
-                });
-                if (type == ProblemType.A) result[0] += pointsToSum[0];
-                else {
-                    for (int j = 1; j <= pointsToSum[0]; j++) {
-                        lines.add(lines.get(cardNumber + j - 1));
+                card.winningNumbers.addAll(Parser.split(" ", wnSplit).filter(s -> !s.isEmpty()).map(Integer::parseInt).toList());
+                card.ownedNumbers.addAll(Parser.split(" ", nSplit).filter(s -> !s.isEmpty()).map(Integer::parseInt).toList());
+                cards.add(card);
+            });
+        }
+        for (int i = 0; i < cards.size(); i++) {
+            Card card = cards.get(i);
+            int[] pointsToSum = new int[] {0};
+            card.ownedNumbers.forEach(n -> {
+                if (card.winningNumbers.contains(n)) {
+                    if (type == ProblemType.A) {
+                        if (pointsToSum[0] == 0) pointsToSum[0] += 1;
+                        else pointsToSum[0] *= 2;
+                    } else {
+                        pointsToSum[0] += 1;
                     }
                 }
             });
+            if (type == ProblemType.A) result[0] += pointsToSum[0];
+            else {
+                for (int j = 1; j <= pointsToSum[0]; j++) {
+                    cards.add(cards.get(card.index + j - 1));
+                }
+            }
         }
         if (type == ProblemType.A) return String.valueOf(result[0]);
-        else return String.valueOf(lines.size());
+        else return String.valueOf(cards.size());
+    }
+
+    class Card {
+        int index;
+        ArrayList<Integer> winningNumbers = new ArrayList<>();
+        ArrayList<Integer> ownedNumbers = new ArrayList<>();
+        Card(int index) {
+            this.index = index;
+        }
     }
 }
