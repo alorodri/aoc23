@@ -32,7 +32,7 @@ public class Utils {
         final double durationSeconds = durationMilli / 1_000.0;
         String valueToPrint = "undefined";
         if (durationSeconds >= 1.0d) {
-            valueToPrint = String.format("%.2fs%n", durationSeconds);
+            valueToPrint = String.format("%.2fs", durationSeconds);
         } else if (durationMilli >= 1.0d) {
             valueToPrint = String.format("%.2fms", durationMilli);
         } else if (durationMicro > 0) {

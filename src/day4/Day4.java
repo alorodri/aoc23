@@ -5,7 +5,6 @@ import utils.Problem;
 import utils.ProblemType;
 import utils.TestResults;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -62,7 +61,7 @@ public class Day4 extends Problem {
         else return String.valueOf(cards.size());
     }
 
-    class Card {
+    static class Card {
         int index;
         Set<Integer> winningNumbers = new HashSet<>();
         List<Integer> ownedNumbers = new ArrayList<>();
