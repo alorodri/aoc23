@@ -32,9 +32,12 @@ public class Day1 extends Problem {
         for (final String line : lines) {
             int firstDigit = -1;
             int lastDigit = -1;
-            char[] chars = line.toCharArray();
             int charidx = 0;
-            for (final char c : chars) {
+
+            int len = line.length();
+
+            for (int i = 0; i < len; ++i) {
+                final char c = line.charAt(i);
                 if (c >= '0' && c <= '9') {
                     int digit = c - '0';
                     if (firstDigit == -1) {

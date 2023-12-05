@@ -35,10 +35,11 @@ public class Logger {
         return instance;
     }
 
-    public void log(final String msg) {
-        txtArea.append("[LOG] ");
-        txtArea.append(msg + "\n");
-        txtArea.setCaretPosition(txtArea.getDocument().getLength());
+    public static void log(final String msg) {
+        Logger logger = getInstance();
+        logger.txtArea.append("[LOG] ");
+        logger.txtArea.append(msg + "\n");
+        logger.txtArea.setCaretPosition(logger.txtArea.getDocument().getLength());
     }
 
     public void close() {

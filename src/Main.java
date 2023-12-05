@@ -4,7 +4,7 @@ import utils.Utils;
 public class Main {
     public static void main(String[] args) {
         Utils.measureGlobalTime(() -> {
-            Utils.executeAllDays(4);
+            Utils.executeAllDays(5);
         });
         ProblemPrinter.endPrinting();
     }
