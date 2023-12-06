@@ -1,6 +1,7 @@
 package utils;
 
 import java.util.Arrays;
+import java.util.HashSet;
 
 public class Utils {
     private static final int[] daysWithTestB = new int[] {
@@ -68,11 +69,17 @@ public class Utils {
         }
     }
 
-    public static void executeAllDays(final int total) {
+    public static void executeAllDays(final int total, final HashSet<Integer> skip) {
         ProblemPrinter.startPrinting();
         ProblemPrinter.addSeparation();
         ProblemPrinter.addSeparation();
         for (int i = 1; i <= total; i++) {
+            if (skip.contains(i)) {
+                ProblemPrinter.addRow("DAY " + i + " SKIPPED", "");
+                ProblemPrinter.addSeparation();
+                ProblemPrinter.addSeparation();
+                continue;
+            }
             int finalI = i;
             boolean hasTestB = false;
             if (Arrays.stream(daysWithTestB).anyMatch(day -> day == finalI)) {
