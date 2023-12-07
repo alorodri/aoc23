@@ -8,7 +8,7 @@ public class Main {
         var skip = new HashSet<Integer>();
         skip.add(5);
         Utils.measureGlobalTime(() -> {
-            Utils.executeAllDays(6, skip);
+            Utils.executeAllDays(7, skip);
         });
         ProblemPrinter.endPrinting();
     }
