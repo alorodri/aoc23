@@ -5,7 +5,7 @@ import java.util.HashSet;
 
 public class Utils {
     private static final int[] daysWithTestB = new int[] {
-            1
+            1, 7
     };
     public static <T> T convert(Object value, Class<T> type) {
         if (value instanceof Integer) {
@@ -58,7 +58,7 @@ public class Utils {
         return result;
     }
 
-    public static void executeDay(final int day, boolean hasTestB) {
+    public static void executeDay(final int day) {
         try {
             Class<Problem> problem = (Class<Problem>) Class.forName(String.format("day%d.Day%d", day, day));
             var problemInstance = problem.getDeclaredConstructor().newInstance();
@@ -80,14 +80,9 @@ public class Utils {
                 ProblemPrinter.addSeparation();
                 continue;
             }
-            int finalI = i;
-            boolean hasTestB = false;
-            if (Arrays.stream(daysWithTestB).anyMatch(day -> day == finalI)) {
-                hasTestB = true;
-            }
             ProblemPrinter.addRow("Solving DAY " + i, "");
             ProblemPrinter.addSeparation();
-            executeDay(i, hasTestB);
+            executeDay(i);
             ProblemPrinter.addSeparation();
             ProblemPrinter.addSeparation();
         }

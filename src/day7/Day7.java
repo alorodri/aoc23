@@ -1,6 +1,5 @@
 package day7;
 
-import org.jetbrains.annotations.NotNull;
 import utils.Problem;
 import utils.ProblemType;
 import utils.TestResults;
@@ -10,10 +9,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@TestResults(resultA = "6440", resultB = "5905")
+@TestResults(resultA = "6440", resultB = "6839")
 public class Day7 extends Problem {
     public Day7() {
-        super(7);
+        super(7, true);
         cardValues.put('2', 2);
         cardValues.put('3', 3);
         cardValues.put('4', 4);
@@ -81,8 +80,8 @@ public class Day7 extends Problem {
         if (type == ProblemType.B && entries.containsKey('J')) {
             Character keyWithGreatestValue = null;
             Integer higherValue = 0;
-            for (var entry : entries.entrySet()) {
-                if (keyWithGreatestValue == null || higherValue < entry.getValue()) {
+            for (var entry : entries.entrySet().stream().sorted((o1, o2) -> cardValues.get(o2.getKey()).compareTo(cardValues.get(o1.getKey()))).toList()) {
+                if (keyWithGreatestValue == null || (higherValue < entry.getValue() && entry.getKey() != 'J')) {
                     higherValue = entry.getValue();
                     keyWithGreatestValue = entry.getKey();
                 } else if (higherValue.equals(entry.getValue()) && entry.getKey() != 'J') {
@@ -92,7 +91,7 @@ public class Day7 extends Problem {
                 }
             }
             entries.replace(keyWithGreatestValue, entries.get(keyWithGreatestValue) + entries.get('J'));
-            entries.remove('J');
+            if (entries.values().size() != 1) entries.remove('J');
         }
         if (entries.values().size() == 5) {
             // hay 5 cartas diferentes
@@ -145,7 +144,7 @@ public class Day7 extends Problem {
         }
 
         @Override
-        public int compareTo(@NotNull Hand o) {
+        public int compareTo(Hand o) {
             if (handValues.get(this.type) > handValues.get(o.type)) {
                 return 1;
             } else if (handValues.get(this.type) < handValues.get(o.type)) {
